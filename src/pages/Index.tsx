@@ -1,9 +1,8 @@
 import { Header } from "@/components/Header"
 import { Hero } from "@/components/Hero"
 import { Philosophy } from "@/components/Philosophy"
-import { Services } from "@/components/Services"
-import { Process } from "@/components/Process"
-import { Testimonial } from "@/components/Testimonial"
+import { Seasons } from "@/components/Seasons"
+import { News } from "@/components/News"
 import { Contact } from "@/components/Contact"
 import { Footer } from "@/components/Footer"
 
@@ -13,9 +12,8 @@ export default function Index() {
       <Header />
       <Hero />
       <Philosophy />
-      <Services />
-      <Process />
-      <Testimonial />
+      <Seasons />
+      <News />
       <Contact />
       <Footer />
     </main>
