@@ -1,19 +1,19 @@
 import { Header } from "@/components/Header"
 import { Hero } from "@/components/Hero"
-import { Philosophy } from "@/components/Philosophy"
-import { Seasons } from "@/components/Seasons"
 import { News } from "@/components/News"
+import { Seasons } from "@/components/Seasons"
+import { Philosophy } from "@/components/Philosophy"
 import { Contact } from "@/components/Contact"
 import { Footer } from "@/components/Footer"
 
 export default function Index() {
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen bg-background">
       <Header />
       <Hero />
-      <Philosophy />
-      <Seasons />
       <News />
+      <Seasons />
+      <Philosophy />
       <Contact />
       <Footer />
     </main>

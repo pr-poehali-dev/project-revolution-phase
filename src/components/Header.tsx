@@ -1,50 +1,72 @@
 import { useState } from "react"
 
+const navLinks = [
+  { label: "Главная", href: "/" },
+  { label: "Администрация", href: "#admin" },
+  { label: "История", href: "#history" },
+  { label: "Образование", href: "#education" },
+  { label: "Предприятия", href: "#business" },
+  { label: "Культура", href: "#culture" },
+  { label: "Пассажиртранспорт", href: "#transport" },
+  { label: "Природа", href: "#seasons" },
+  { label: "Магазины", href: "#shops" },
+]
+
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [active, setActive] = useState("Главная")
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm">
-      <nav className="mx-auto max-w-7xl px-6 lg:px-12">
-        <div className="flex h-20 items-center justify-between">
-          <a href="/" className="font-serif text-2xl tracking-wide text-foreground">
-            Деревня Ключи
-          </a>
+    <header className="bg-background border-b border-border sticky top-0 z-50">
+      <nav className="mx-auto max-w-7xl px-6 lg:px-8">
+        {/* Desktop */}
+        <div className="hidden md:flex items-center">
+          {navLinks.map((link) => (
+            <a
+              key={link.label}
+              href={link.href}
+              onClick={() => setActive(link.label)}
+              className={`px-4 py-4 text-sm transition-colors duration-200 border-b-2 whitespace-nowrap ${
+                active === link.label
+                  ? "border-foreground text-foreground font-medium"
+                  : "border-transparent text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              {link.label}
+            </a>
+          ))}
+        </div>
 
-          <div className="hidden md:flex items-center gap-12">
-            <a href="#about" className="text-sm tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors duration-500">
-              О деревне
-            </a>
-            <a href="#seasons" className="text-sm tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors duration-500">
-              Сезоны
-            </a>
-            <a href="#news" className="text-sm tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors duration-500">
-              Новости
-            </a>
-            <a href="#contact" className="text-sm tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors duration-500">
-              Контакты
-            </a>
-          </div>
-
+        {/* Mobile */}
+        <div className="md:hidden flex items-center justify-between h-14">
+          <span className="text-sm font-medium text-foreground">Деревня Ключи</span>
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden flex flex-col gap-1.5 p-2"
-            aria-label="Открыть меню"
+            className="flex flex-col gap-1.5 p-2"
+            aria-label="Меню"
           >
-            <span className={`block w-6 h-px bg-foreground transition-transform duration-300 ${isMenuOpen ? "rotate-45 translate-y-2" : ""}`} />
-            <span className={`block w-6 h-px bg-foreground transition-opacity duration-300 ${isMenuOpen ? "opacity-0" : ""}`} />
-            <span className={`block w-6 h-px bg-foreground transition-transform duration-300 ${isMenuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
+            <span className={`block w-5 h-px bg-foreground transition-transform duration-300 ${isMenuOpen ? "rotate-45 translate-y-1.5" : ""}`} />
+            <span className={`block w-5 h-px bg-foreground transition-opacity duration-300 ${isMenuOpen ? "opacity-0" : ""}`} />
+            <span className={`block w-5 h-px bg-foreground transition-transform duration-300 ${isMenuOpen ? "-rotate-45 -translate-y-1.5" : ""}`} />
           </button>
         </div>
 
-        <div className={`md:hidden overflow-hidden transition-all duration-500 ease-out ${isMenuOpen ? "max-h-64 pb-8" : "max-h-0"}`}>
-          <div className="flex flex-col gap-6 pt-4">
-            <a href="#about" onClick={() => setIsMenuOpen(false)} className="text-sm tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors">О деревне</a>
-            <a href="#seasons" onClick={() => setIsMenuOpen(false)} className="text-sm tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors">Сезоны</a>
-            <a href="#news" onClick={() => setIsMenuOpen(false)} className="text-sm tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors">Новости</a>
-            <a href="#contact" onClick={() => setIsMenuOpen(false)} className="text-sm tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors">Контакты</a>
+        {isMenuOpen && (
+          <div className="md:hidden pb-4 flex flex-col gap-1">
+            {navLinks.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                onClick={() => { setActive(link.label); setIsMenuOpen(false) }}
+                className={`px-2 py-2 text-sm rounded transition-colors ${
+                  active === link.label ? "text-foreground font-medium" : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {link.label}
+              </a>
+            ))}
           </div>
-        </div>
+        )}
       </nav>
     </header>
   )

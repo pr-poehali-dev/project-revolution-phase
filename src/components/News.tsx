@@ -1,17 +1,27 @@
-import { useEffect, useRef, useState } from "react"
+import { useState } from "react"
+import Icon from "@/components/ui/icon"
 
 const news = [
   {
+    tag: "событие",
+    date: "31 мая 2026",
+    title: "Региональный Сабантуй — 31 мая в Кадниково",
+    text: "Губернатор Свердловской области Денис Паслер подписал распоряжение: 31 мая в селе Кадниково Сысертского муниципального округа состоится региональный Сабантуй. В программе — свыше 25 национальных подворий, выставка-ярмарка народных промыслов, дегустация татарских и башкирских блюд.",
+  },
+  {
+    tag: "новость",
     date: "12 апреля 2026",
     title: "Весенний субботник в деревне",
     text: "Жители деревни Ключи вышли на общий субботник — убрали берег речки и высадили молодые берёзки у дороги.",
   },
   {
+    tag: "новость",
     date: "3 марта 2026",
     title: "Снежная зима подходит к концу",
     text: "В этом году выпало рекордное количество снега. Фоторепортаж из заснеженных Ключей уже в галерее сезонов.",
   },
   {
+    tag: "новость",
     date: "15 января 2026",
     title: "Новый год в Ключах",
     text: "Деревня встретила Новый год у общей ёлки. Морозный вечер, огни и горячий чай — традиция продолжается.",
@@ -19,52 +29,83 @@ const news = [
 ]
 
 export function News() {
-  const [isVisible, setIsVisible] = useState(false)
-  const sectionRef = useRef<HTMLElement>(null)
+  const [current, setCurrent] = useState(0)
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setIsVisible(true) },
-      { threshold: 0.1 },
-    )
-    if (sectionRef.current) observer.observe(sectionRef.current)
-    return () => observer.disconnect()
-  }, [])
+  const prev = () => setCurrent((c) => (c === 0 ? news.length - 1 : c - 1))
+  const next = () => setCurrent((c) => (c === news.length - 1 ? 0 : c + 1))
+
+  const item = news[current]
 
   return (
-    <section ref={sectionRef} id="news" className="py-32 lg:py-40 px-6 lg:px-12">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-20">
-          <p
-            className={`text-xs tracking-[0.3em] uppercase text-terracotta mb-6 transition-all duration-1000 ${
-              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-            }`}
-          >
-            Жизнь деревни
-          </p>
-          <h2
-            className={`font-serif text-4xl md:text-5xl lg:text-6xl font-light text-foreground text-balance transition-all duration-1000 delay-200 ${
-              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-            }`}
-          >
-            Новости
+    <section id="news" className="px-6 lg:px-8 py-12 max-w-7xl mx-auto">
+      <div className="grid md:grid-cols-[220px_1fr] gap-10">
+        {/* Left label */}
+        <div>
+          <p className="text-xs tracking-widest uppercase text-muted-foreground mb-3">Актуально</p>
+          <h2 className="font-sans font-bold text-2xl md:text-3xl text-foreground leading-tight">
+            Новости<br />деревни
           </h2>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-px bg-border">
-          {news.map((item, index) => (
-            <div
-              key={item.title}
-              className={`bg-background p-10 lg:p-12 transition-all duration-1000 hover:bg-card ${
-                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-              }`}
-              style={{ transitionDelay: `${300 + index * 150}ms` }}
-            >
-              <p className="text-xs tracking-widest uppercase text-sage mb-6">{item.date}</p>
-              <h3 className="font-serif text-2xl text-foreground mb-4 leading-snug">{item.title}</h3>
-              <p className="text-muted-foreground leading-relaxed text-sm">{item.text}</p>
+        {/* Right: card + counter */}
+        <div>
+          {/* Counter */}
+          <div className="flex items-center justify-end gap-2 mb-4">
+            <span className="text-sm text-muted-foreground">{current + 1}/{news.length}</span>
+            <div className="flex gap-1">
+              {news.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setCurrent(i)}
+                  className={`h-px transition-all duration-300 ${
+                    i === current ? "w-8 bg-foreground" : "w-5 bg-border"
+                  }`}
+                  aria-label={`Новость ${i + 1}`}
+                />
+              ))}
             </div>
-          ))}
+          </div>
+
+          {/* Card */}
+          <div className="border border-border rounded-sm p-6 md:p-8 bg-background">
+            <div className="flex items-center gap-3 mb-5">
+              <span className="border border-border rounded-full text-xs px-3 py-1 text-muted-foreground">
+                {item.tag}
+              </span>
+              <span className="bg-foreground text-background text-xs px-3 py-1 rounded-full font-medium">
+                {item.date}
+              </span>
+            </div>
+
+            <h3 className="font-sans font-bold text-lg md:text-xl text-foreground mb-3 leading-snug">
+              {item.title}
+            </h3>
+            <p className="text-sm text-muted-foreground leading-relaxed mb-6">
+              {item.text}
+            </p>
+
+            <div className="flex items-center justify-between">
+              <a href="#" className="text-sm text-foreground hover:text-sage transition-colors">
+                Читать далее →
+              </a>
+              <div className="flex gap-2">
+                <button
+                  onClick={prev}
+                  className="w-9 h-9 border border-border flex items-center justify-center hover:bg-sand transition-colors"
+                  aria-label="Предыдущая"
+                >
+                  <Icon name="ChevronLeft" size={16} />
+                </button>
+                <button
+                  onClick={next}
+                  className="w-9 h-9 border border-border flex items-center justify-center hover:bg-sand transition-colors"
+                  aria-label="Следующая"
+                >
+                  <Icon name="ChevronRight" size={16} />
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
